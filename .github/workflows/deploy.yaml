@@ -25,6 +25,10 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Build and push
         uses: docker/build-push-action@v6
+        env:
+          AWS_ACCESS_KEY_ID: ${{ vars.CACHE_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CACHE_AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.CACHE_AWS_SESSION_TOKEN }}
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
@@ -32,8 +36,8 @@ jobs:
           tags: |
             allypost/twitshot:latest
             allypost/twitshot:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=s3,region=${{ vars.CACHE_AWS_REGION }},bucket=${{ vars.CACHE_AWS_BUCKET_NAME }},endpoint_url=${{ vars.CACHE_AWS_ENDPOINT_URL_S3 }},use_path_style=true
+          cache-to: type=s3,region=${{ vars.CACHE_AWS_REGION }},bucket=${{ vars.CACHE_AWS_BUCKET_NAME }},endpoint_url=${{ vars.CACHE_AWS_ENDPOINT_URL_S3 }},use_path_style=true,upload_parallelism=8,touch_refresh=1h,mode=max
 
   notify-watchtower:
     runs-on: ubuntu-latest
