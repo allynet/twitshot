@@ -177,6 +177,18 @@ export const handleTumblrPost: RequestHandler = async (req, res, url) => {
           });
       }
 
+      // Make the post not rounded
+      {
+        logger.debug("Make post not rounded");
+        await post$
+          .evaluate(($post) => {
+            $post.style.borderRadius = "0";
+          })
+          .catch((e) => {
+            logger.debug("Make post not rounded error", e);
+          });
+      }
+
       logger.debug("Screenshot post");
       return post$.screenshot(SCREENSHOT_CONFIG);
     },
