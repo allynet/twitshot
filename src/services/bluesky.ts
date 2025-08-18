@@ -82,6 +82,11 @@ export async function initBlueSky({ logger }: { logger: Logger }) {
         identifier: accIdentifier,
         password: accPassword,
       })
+      .then((_) => {
+        logger.info("Logged into bsky", {
+          refreshJwt: bskyCredentialStore.session?.refreshJwt,
+        });
+      })
       .catch((e) => {
         logger.error("Error logging into bsky", e);
       });
