@@ -1,13 +1,18 @@
-FROM oven/bun:1 AS build
+ARG NVM_VERSION=v0.40.3
+ARG NODE_VERSION=22.18.0
+ARG BUN_VERSION=1.2
+
+FROM oven/bun:${BUN_VERSION} AS build
 WORKDIR /app
 RUN apt-get update && apt-get install -y curl
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+ARG NVM_VERSION
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash
 ENV NVM_DIR=/root/.nvm
-ENV NODE_VERSION=22.8.0
+ARG NODE_VERSION
 RUN . "$NVM_DIR/nvm.sh" \
-  && nvm install "$NODE_VERSION" \
-  && nvm use --delete-prefix "$NODE_VERSION" \
-  && nvm alias default "$NODE_VERSION" \
+  && nvm install "${NODE_VERSION}" \
+  && nvm use --delete-prefix "${NODE_VERSION}" \
+  && nvm alias default "${NODE_VERSION}" \
   ;
 ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin:${PATH}"
 ENV NODE_ENV=production
@@ -16,7 +21,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build --external electron
 
-FROM node:22-bookworm-slim
+FROM node:${NODE_VERSION}-bookworm-slim
 WORKDIR /app
 ENV NODE_ENV=production
 # Install PM2 (process manager)
