@@ -101,7 +101,7 @@ const INDEX_RAW_HTML = INDEX_RAW_HTML_TEMPLATE.replace(
           ${el.title}:
           <br>
           <input
-            name="$$$$${name}"
+            name="$$${name}"
             placeholder="${el.placeholder || "element#with-an-id.and-a-class-name"}"
             style="width: 100%"
             ${
