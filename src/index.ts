@@ -39,7 +39,7 @@ async function main() {
       return `${addr.address}:${addr.port}`;
     })();
 
-    logger.info("Environment:", JSON.stringify(process.env));
+    logger.debug("Environment:", JSON.stringify(process.env));
     logger.info("Config:", JSON.stringify(CONFIG));
     logger.info(`Blocked scrape IPs:`, BLOCKED_IPS_FILTER.rules.join(", "));
     logger.info(`Listening on http://${listeningOn}`);
