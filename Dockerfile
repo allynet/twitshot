@@ -16,7 +16,7 @@ RUN . "$NVM_DIR/nvm.sh" \
   ;
 ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin:${PATH}"
 ENV NODE_ENV=production
-COPY package.json bun.lockb ./
+COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build --external electron
