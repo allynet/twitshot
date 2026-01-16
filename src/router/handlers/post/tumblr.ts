@@ -106,6 +106,17 @@ export const handleTumblrPost: RequestHandler = async (req, res, url) => {
       // Clean up notes/footer section
       {
         logger.debug("Clean up notes/footer section");
+
+        await post$
+          .evaluate(($post) => {
+            $post
+              .querySelector('[data-testid="post-activity-container"]')
+              ?.remove();
+          })
+          .catch((e) => {
+            logger.debug("Failed to remove comments section thing", e);
+          });
+
         const footer$ = await post$
           .$('footer[role="contentinfo"]')
           .catch(() => null);
